@@ -2,7 +2,7 @@
 
 ## 🚀 Automated Event Data via GitHub Actions
 
-This project automatically scrapes SRRC events **daily** and makes them available through GitHub Releases for easy integration with mobile applications, web apps, and other services.
+This project automatically scrapes SRRC events **daily** and makes them available through GitHub Releases for easy integration with mobile applications and other client services.
 
 ## Overview
 
@@ -80,42 +80,6 @@ GET https://api.github.com/repos/raphaelguye/srrc-calendar-scraper/releases/late
 # Direct download (URL from above response)
 GET https://github.com/raphaelguye/srrc-calendar-scraper/releases/download/TAG/srrc_events.json
 ```
-
-## 🌐 Web Interface
-
-A web interface is available to browse events directly in your browser:
-
-**Live Site**: [https://srrc-calendar.netlify.app](https://srrc-calendar.netlify.app)
-
-### Features
-- 🔍 **Search and filter** events
-- 📱 **Mobile-friendly** responsive design
-- 🔄 **Auto-refresh** with latest data
-- 📊 **Event statistics** and counters
-
-### Netlify Deployment
-
-The web interface uses Netlify for hosting with CORS proxy configuration:
-
-```toml
-# netlify.toml
-[build]
-  publish = "docs"
-
-[[redirects]]
-  from = "/api/releases"
-  to = "https://api.github.com/repos/raphaelguye/srrc-calendar-scraper/releases/latest"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/events.json"
-  to = "https://github.com/raphaelguye/srrc-calendar-scraper/releases/latest/download/srrc_events.json"
-  status = 200
-  force = true
-```
-
-This configuration creates API endpoints that bypass CORS restrictions for web browsers.
 
 ## 🛠️ Local Development
 
