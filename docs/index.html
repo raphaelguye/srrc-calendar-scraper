@@ -299,18 +299,8 @@
                 statusEl.textContent = '📡 Loading events data...';
 
                 try {
-                    // Use Netlify proxy to avoid CORS issues
-                    const repoUrl = '/api/releases';
-                    const releaseResponse = await fetch(repoUrl);
-                    
-                    if (!releaseResponse.ok) {
-                        throw new Error(`Failed to fetch release: ${releaseResponse.status}`);
-                    }
-
-                    const release = await releaseResponse.json();
-                    
-                    // Use direct proxy to latest events file (simpler approach)
-                    const eventsResponse = await fetch('/api/events.json');
+                    // Use Netlify function to fetch events data (handles CORS properly)
+                    const eventsResponse = await fetch('/.netlify/functions/events');
                     if (!eventsResponse.ok) {
                         throw new Error(`Failed to fetch events: ${eventsResponse.status}`);
                     }
@@ -318,10 +308,18 @@
                     this.events = await eventsResponse.json();
                     this.filteredEvents = [...this.events];
 
+                    // Get release info for timestamp
+                    const releaseResponse = await fetch('/api/releases');
+                    let releaseDate = new Date().toISOString();
+                    if (releaseResponse.ok) {
+                        const release = await releaseResponse.json();
+                        releaseDate = release.published_at;
+                    }
+
                     statusEl.className = 'status success';
-                    statusEl.textContent = `✅ Loaded ${this.events.length} events (Updated: ${new Date(release.published_at).toLocaleString()})`;
+                    statusEl.textContent = `✅ Loaded ${this.events.length} events (Updated: ${new Date(releaseDate).toLocaleString()})`;
                     
-                    this.updateStats(release.published_at);
+                    this.updateStats(releaseDate);
                     this.renderEvents();
 
                 } catch (error) {
