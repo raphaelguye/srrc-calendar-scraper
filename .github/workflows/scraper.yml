@@ -1,0 +1,52 @@
+name: SRRC Event Scraper
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6 AM UTC
+  workflow_dispatch:  # Manual trigger button in GitHub Actions
+
+jobs:
+  scrape-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4
+      
+      - name: Run scraper
+        run: python3 srrc_event_scraper.py
+      
+      - name: Create timestamp
+        id: timestamp
+        run: echo "timestamp=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
+      
+      - name: Create Release with Events Data
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: data-${{ steps.timestamp.outputs.timestamp }}
+          name: Events Data ${{ steps.timestamp.outputs.timestamp }}
+          files: srrc_events.json
+          body: |
+            🤖 Automated scrape of SRRC events
+            📊 Generated: ${{ steps.timestamp.outputs.timestamp }}
+            🔄 Run #${{ github.run_number }}
+            
+            ## Access the data
+            **Direct download**: [srrc_events.json](https://github.com/${{ github.repository }}/releases/download/data-${{ steps.timestamp.outputs.timestamp }}/srrc_events.json)
+            
+            ## Mobile app integration
+            Use the GitHub Releases API:
+            ```
+            GET https://api.github.com/repos/${{ github.repository }}/releases/latest
+            ```
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

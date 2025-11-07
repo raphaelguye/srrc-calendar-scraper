@@ -1,5 +1,9 @@
 # SRRC Calendar Event Scraper
 
+## 🚀 Automated Event Data via GitHub Actions
+
+This project automatically scrapes SRRC events **daily** and makes them available through GitHub Releases for easy app integration.
+
 ## Summary
 
 The SRRC (Swiss Rock'n'Roll Confederation) website at https://srrc.ch/calendrier/ uses a dynamic JavaScript-based calendar that loads events progressively via AJAX calls. When you click the "Load More" button, it makes POST requests to a WordPress AJAX endpoint to fetch additional events.
@@ -60,9 +64,35 @@ The endpoint returns JSON with the following structure:
 ### November 2026 (From "Load More")
 - **Nov 21-22** (Sat-Sun): World Championship RR & World Cup RR 2026 - Klagenfurt (Austria)
 
-## How to Get ALL Events
+## 🤖 Automated Data Collection (GitHub Actions)
 
-Unfortunately, I cannot directly access the SRRC website from my environment due to network restrictions. However, I've created a Python script that you can run on your local machine to fetch all events.
+### What Happens Automatically
+
+1. **Daily at 6 AM UTC**: GitHub Actions runs the scraper
+2. **Events Scraped**: All events for the next 24 months are collected
+3. **Release Created**: New release with `srrc_events.json` file
+4. **Mobile Apps**: Can fetch data via GitHub Releases API
+
+### Manual Trigger
+
+You can also trigger the scraper manually:
+1. Go to [Actions tab](../../actions)
+2. Click "SRRC Event Scraper"
+3. Click "Run workflow"
+
+### API Endpoints for Mobile Apps
+
+```bash
+# Get latest release info (includes download URLs)
+GET https://api.github.com/repos/raphaelguye/srrc-calendar-scraper/releases/latest
+
+# Direct download (URL from above response)
+GET https://github.com/raphaelguye/srrc-calendar-scraper/releases/download/TAG/srrc_events.json
+```
+
+## 🛠️ Local Development
+
+If you want to run the scraper locally or contribute to the project:
 
 ### Option 1: Use the Python Script with Virtual Environment (Recommended)
 
