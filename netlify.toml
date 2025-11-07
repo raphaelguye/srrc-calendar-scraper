@@ -11,10 +11,18 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Custom redirect for API calls (optional)
+# Proxy for release info
 [[redirects]]
   from = "/api/releases"
   to = "https://api.github.com/repos/raphaelguye/srrc-calendar-scraper/releases/latest"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+# Proxy for asset downloads
+[[redirects]]
+  from = "/api/download/*"
+  to = "https://github.com/raphaelguye/srrc-calendar-scraper/releases/download/:splat"
   status = 200
   force = true
   headers = {X-From = "Netlify"}

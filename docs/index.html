@@ -309,14 +309,19 @@
 
                     const release = await releaseResponse.json();
                     
-                    // Find the JSON asset
+                    // Find the JSON asset  
                     const jsonAsset = release.assets.find(asset => asset.name === 'srrc_events.json');
                     if (!jsonAsset) {
                         throw new Error('Events data file not found in latest release');
                     }
 
-                    // Download the events data
-                    const eventsResponse = await fetch(jsonAsset.browser_download_url);
+                    // Extract the download path for our asset proxy
+                    const downloadUrl = jsonAsset.browser_download_url;
+                    const downloadPath = downloadUrl.split('/releases/download/')[1];
+                    const proxyUrl = `/api/download/${downloadPath}`;
+                    
+                    // Fetch through Netlify asset proxy to avoid CORS
+                    const eventsResponse = await fetch(proxyUrl);
                     if (!eventsResponse.ok) {
                         throw new Error(`Failed to fetch events: ${eventsResponse.status}`);
                     }
@@ -325,7 +330,7 @@
                     this.filteredEvents = [...this.events];
 
                     statusEl.className = 'status success';
-                    statusEl.textContent = `✅ Loaded ${this.events.length} events successfully`;
+                    statusEl.textContent = `✅ Loaded ${this.events.length} events (Updated: ${new Date(release.published_at).toLocaleString()})`;
                     
                     this.updateStats(release.published_at);
                     this.renderEvents();
