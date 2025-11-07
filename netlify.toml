@@ -2,6 +2,7 @@
 
 [build]
   publish = "docs"
+  functions = "netlify/functions"
 
 [[headers]]
   for = "/*"
@@ -11,18 +12,10 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Proxy for release info
+# Proxy for release info (keep this working)
 [[redirects]]
   from = "/api/releases"
   to = "https://api.github.com/repos/raphaelguye/srrc-calendar-scraper/releases/latest"
-  status = 200
-  force = true
-  headers = {X-From = "Netlify"}
-
-# Proxy for latest events file directly
-[[redirects]]
-  from = "/api/events.json"
-  to = "https://github.com/raphaelguye/srrc-calendar-scraper/releases/latest/download/srrc_events.json"
   status = 200
   force = true
   headers = {X-From = "Netlify"}
