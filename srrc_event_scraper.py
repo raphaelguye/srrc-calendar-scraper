@@ -23,6 +23,7 @@ from html import unescape
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import sys
+import time
 
 class SRRCEventScraper:
     def __init__(self):
@@ -49,6 +50,10 @@ class SRRCEventScraper:
         }
         
         try:
+            # Small delay to be polite to the server
+            if offset > 0:
+                time.sleep(0.5)  # 500ms delay between paginated requests
+            
             response = self.session.post(self.base_url, data=data, timeout=10)
             response.raise_for_status()
             return response.json()
@@ -132,12 +137,14 @@ class SRRCEventScraper:
         """Fetch all events from the calendar"""
         all_events = []
         date_ranges = self.generate_date_ranges()
+        seen_event_ids = set()  # Track seen events to detect duplicates
         
         print(f"🔍 Scanning {len(date_ranges)} date ranges...\n")
         
         for start_date in date_ranges:
             offset = 0
             events_in_range = 0
+            new_events_in_page = 0
             
             while True:
                 result = self.fetch_events_page(start_date, offset)
@@ -152,26 +159,39 @@ class SRRCEventScraper:
                 
                 if html and html.strip():
                     events = self.parse_event_html(html)
-                    all_events.extend(events)
-                    events_in_range += len(events)
+                    
+                    # Check for new events (not duplicates)
+                    new_events_in_page = 0
+                    for event in events:
+                        event_id = event.get('event_id') or f"{event.get('title')}_{event.get('start_date')}"
+                        if event_id not in seen_event_ids:
+                            seen_event_ids.add(event_id)
+                            all_events.append(event)
+                            events_in_range += 1
+                            new_events_in_page += 1
+                    
+                    # If no new events, the API is returning duplicates - stop
+                    if new_events_in_page == 0 and offset > 0:
+                        print(f"  → No new events at offset {offset}, stopping pagination")
+                        break
                 
                 if has_more == 0 or count == 0:
                     break
                 
                 offset += 1
                 
-                # Safety check
-                if offset > 20:
-                    print(f"⚠️  Warning: Reached max offset for {start_date}", file=sys.stderr)
+                # Safety check - but now we should rarely hit this
+                if offset > 10:
+                    print(f"⚠️  Warning: Reached max offset for {start_date} (found {events_in_range} events)", file=sys.stderr)
                     break
             
             if events_in_range > 0:
-                print(f"✓ {start_date}: Found {events_in_range} events")
+                print(f"✓ {start_date}: Found {events_in_range} unique events")
         
         return all_events
     
     def remove_duplicates(self, events):
-        """Remove duplicate events based on event_id or title+date"""
+        """Remove any remaining duplicate events based on event_id or title+date"""
         seen = set()
         unique_events = []
         
@@ -185,6 +205,7 @@ class SRRCEventScraper:
                 seen.add(key)
                 unique_events.append(event)
         
+        print(f"\n📊 Deduplication: {len(events)} → {len(unique_events)} events")
         return unique_events
     
     def format_event_display(self, event):
