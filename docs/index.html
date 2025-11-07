@@ -299,8 +299,8 @@
                 statusEl.textContent = '📡 Loading events data...';
 
                 try {
-                    // Simple GitHub API call - works perfectly on GitHub Pages
-                    const repoUrl = 'https://api.github.com/repos/raphaelguye/srrc-calendar-scraper/releases/latest';
+                    // Use Netlify proxy to avoid CORS issues
+                    const repoUrl = '/api/releases';
                     const releaseResponse = await fetch(repoUrl);
                     
                     if (!releaseResponse.ok) {
@@ -336,8 +336,8 @@
                     statusEl.innerHTML = `
                         ❌ Error loading events: ${error.message}<br>
                         <small style="margin-top: 0.5rem; display: block;">
-                            💡 This page works best on GitHub Pages. Check <a href="https://github.com/raphaelguye/srrc-calendar-scraper/releases" target="_blank">GitHub Releases</a> 
-                            to verify data exists.
+                            💡 Check <a href="https://github.com/raphaelguye/srrc-calendar-scraper/releases" target="_blank">GitHub Releases</a> 
+                            to verify events data exists.
                         </small>
                     `;
                 }
