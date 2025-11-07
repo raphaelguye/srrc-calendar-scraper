@@ -2,7 +2,7 @@
 
 ## 🚀 Automated Event Data via GitHub Actions
 
-This project automatically scrapes SRRC events **daily** and makes them available through GitHub Releases for easy integration with mobile applications and other services.
+This project automatically scrapes SRRC events **daily** and makes them available through GitHub Releases for easy integration with mobile applications, web apps, and other services.
 
 ## Overview
 
@@ -62,7 +62,7 @@ Events span multiple years and include various types of activities such as:
 1. **Daily at 6 AM UTC**: GitHub Actions runs the scraper
 2. **Events Scraped**: All events for the next 24 months are collected
 3. **Release Created**: New release with `srrc_events.json` file
-4. **Mobile Apps**: Can fetch data via GitHub Releases API
+4. **Client Applications**: Can fetch data via GitHub Releases API
 
 ### Manual Trigger
 
@@ -71,7 +71,7 @@ You can also trigger the scraper manually:
 2. Click "SRRC Event Scraper"
 3. Click "Run workflow"
 
-### API Endpoints for Mobile Apps
+### API Endpoints for Client Applications
 
 ```bash
 # Get latest release info (includes download URLs)
@@ -81,79 +81,79 @@ GET https://api.github.com/repos/raphaelguye/srrc-calendar-scraper/releases/late
 GET https://github.com/raphaelguye/srrc-calendar-scraper/releases/download/TAG/srrc_events.json
 ```
 
+## 🌐 Web Interface
+
+A web interface is available to browse events directly in your browser:
+
+**Live Site**: [https://srrc-calendar.netlify.app](https://srrc-calendar.netlify.app)
+
+### Features
+- 🔍 **Search and filter** events
+- 📱 **Mobile-friendly** responsive design
+- 🔄 **Auto-refresh** with latest data
+- 📊 **Event statistics** and counters
+
+### Netlify Deployment
+
+The web interface uses Netlify for hosting with CORS proxy configuration:
+
+```toml
+# netlify.toml
+[build]
+  publish = "docs"
+
+[[redirects]]
+  from = "/api/releases"
+  to = "https://api.github.com/repos/raphaelguye/srrc-calendar-scraper/releases/latest"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/events.json"
+  to = "https://github.com/raphaelguye/srrc-calendar-scraper/releases/latest/download/srrc_events.json"
+  status = 200
+  force = true
+```
+
+This configuration creates API endpoints that bypass CORS restrictions for web browsers.
+
 ## 🛠️ Local Development
 
-If you want to run the scraper locally or contribute to the project:
+To run the scraper locally:
 
-### Option 1: Use the Python Script with Virtual Environment (Recommended)
+### Quick Start
 
-This project uses a Python virtual environment to keep dependencies isolated.
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/raphaelguye/srrc-calendar-scraper.git
+   cd srrc-calendar-scraper
+   ```
 
-#### Quick Start (Automated)
-
-1. **Download all files** to a directory
-2. **Run the setup script**:
+2. **Run the automated setup**:
    ```bash
    chmod +x setup_and_run.sh
    ./setup_and_run.sh
    ```
 
-This will automatically:
-- Create a virtual environment
-- Install all dependencies from `requirements.txt`
+This script will automatically:
+- Create a Python virtual environment
+- Install all required dependencies
 - Run the scraper
-- Save results to `srrc_events.json`
+- Generate `srrc_events.json` with all events
 
-#### Manual Setup
+### Output
+- All events will be printed to console with formatting
+- Events data saved to `srrc_events.json`
+- Ready for integration with your applications
 
-If you prefer to set up manually:
+## Integration Examples
 
-1. **Create virtual environment**:
-   ```bash
-   python3 -m venv venv
-   ```
-
-2. **Activate virtual environment**:
-   ```bash
-   # On macOS/Linux:
-   source venv/bin/activate
-   
-   # On Windows:
-   venv\Scripts\activate
-   ```
-
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Run the script**:
-   ```bash
-   python srrc_event_scraper.py
-   ```
-
-5. **Deactivate when done**:
-   ```bash
-   deactivate
-   ```
-
-#### Output
-- All events will be printed to console with nice formatting
-- Events will be saved to `srrc_events.json`
-
-### Option 2: Use the Python Script (Without Virtual Environment)
-
-If you don't want to use a virtual environment:
-
-1. **Install dependencies globally**:
-   ```bash
-   pip install requests beautifulsoup4 lxml
-   ```
-
-2. **Run the script**:
-   ```bash
-   python3 srrc_event_scraper.py
-   ```
+The generated `srrc_events.json` can be consumed by:
+- **Mobile apps** (iOS, Android, React Native, Flutter)
+- **Web applications** (React, Vue, Angular, vanilla JS)
+- **Desktop applications** (Electron, native apps)
+- **Backend services** (Node.js, Python, Java, etc.)
+- **Data analysis tools** (R, Python pandas, etc.)
 
 ### Alternative: Browser Console Script
 
