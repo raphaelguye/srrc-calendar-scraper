@@ -19,10 +19,10 @@
   force = true
   headers = {X-From = "Netlify"}
 
-# Proxy for asset downloads
+# Proxy for latest events file directly
 [[redirects]]
-  from = "/api/download/*"
-  to = "https://github.com/raphaelguye/srrc-calendar-scraper/releases/download/:splat"
+  from = "/api/events.json"
+  to = "https://github.com/raphaelguye/srrc-calendar-scraper/releases/latest/download/srrc_events.json"
   status = 200
   force = true
   headers = {X-From = "Netlify"}
