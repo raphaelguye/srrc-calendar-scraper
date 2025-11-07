@@ -8,7 +8,9 @@ on:
 jobs:
   scrape-and-release:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write  # Required to create releases and upload assets
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
