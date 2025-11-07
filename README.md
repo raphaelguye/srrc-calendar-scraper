@@ -2,15 +2,15 @@
 
 ## 🚀 Automated Event Data via GitHub Actions
 
-This project automatically scrapes SRRC events **daily** and makes them available through GitHub Releases for easy app integration.
+This project automatically scrapes SRRC events **daily** and makes them available through GitHub Releases for easy integration with mobile applications and other services.
 
-## Summary
+## Overview
 
-The SRRC (Swiss Rock'n'Roll Confederation) website at https://srrc.ch/calendrier/ uses a dynamic JavaScript-based calendar that loads events progressively via AJAX calls. When you click the "Load More" button, it makes POST requests to a WordPress AJAX endpoint to fetch additional events.
+The SRRC (Swiss Rock'n'Roll Confederation) website uses a dynamic JavaScript-based calendar that loads events progressively via AJAX calls. This scraper automates the process of collecting all event data by interfacing with the underlying WordPress AJAX endpoint.
 
-## What We Discovered
+## Technical Details
 
-### AJAX Endpoint Details
+### AJAX Endpoint
 - **URL**: `https://srrc.ch/wp-admin/admin-ajax.php`
 - **Method**: POST
 - **Content-Type**: `application/x-www-form-urlencoded`
@@ -38,31 +38,22 @@ The endpoint returns JSON with the following structure:
 }
 ```
 
-## Events Found (From Initial Page Load)
+## Event Data Structure
 
-### November 2025
-- **Nov 8** (Sat): RA Thurgi Cup 2025
-- **Nov 15** (Sat): Swiss Ranking Final 2025 - Frauenfeld
-- **Nov 16** (Sun): Skills Tests 2025 - Genève
-- **Nov 22-23** (Sat-Sun): World Championship RR / World Cup RR 2025 - Velika Gorica (Croatia)
-- **Nov 29** (Sat): J+S Foundation – Developper la danse, thème: ABC Boogie Woogie - Macolin
+The scraper collects comprehensive event information including:
 
-### December 2025
-- **Dec 6** (Sat): World Cup Final 2025 - Krakow (Poland)
+- **Event dates and times**
+- **Event titles and descriptions** 
+- **Location information**
+- **Event organizers**
+- **Event URLs and additional details**
+- **Event categories** (competitions, training, meetings, etc.)
 
-### March 2026
-- **Mar 14** (Sat): WRRC General Meeting 2026 - Velika Gorica (Croatia)
-
-### April 2026
-- **Apr 18** (Sat): WCh RR Quattro formations, World Cup RR 2026 - Ljubljana (Slovenia)
-- **Apr 25** (Sat): World Cup BW 2026 - Lillestrøm (Norway)
-
-### May 2026
-- **May 2** (Sat): SRRC Cup 2026 - Vernier
-- **May 9** (Sat): RA Thurgi Cup 2026 - Berg
-
-### November 2026 (From "Load More")
-- **Nov 21-22** (Sat-Sun): World Championship RR & World Cup RR 2026 - Klagenfurt (Austria)
+Events span multiple years and include various types of activities such as:
+- Regional and international competitions
+- Training sessions and workshops
+- Official meetings and assemblies
+- Certification and skills assessments
 
 ## 🤖 Automated Data Collection (GitHub Actions)
 
@@ -164,14 +155,7 @@ If you don't want to use a virtual environment:
    python3 srrc_event_scraper.py
    ```
 
-### Option 2: Manual Browser Collection
-
-1. Visit https://srrc.ch/calendrier/
-2. Keep clicking "Load More" until no more events appear
-3. Copy the entire page HTML
-4. I can help you parse it
-
-### Option 3: Browser Console Script
+### Alternative: Browser Console Script
 
 Open the browser console on https://srrc.ch/calendrier/ and run:
 
@@ -235,23 +219,14 @@ async function fetchAllEvents() {
     return events;
 }
 
-// Run it
+// Execute the function
 fetchAllEvents().then(events => {
-    console.log('Done!');
-    // Copy to clipboard
-    copy(JSON.stringify(events, null, 2));
-    console.log('Events copied to clipboard!');
+    console.log('Scraping complete!');
+    // Export results
+    console.log('Event data:', JSON.stringify(events, null, 2));
 });
 ```
 
-## Additional Information
+## Additional Resources
 
-The SRRC website also provides PDF agendas:
-- AGENDA SRRC & WRRC 2025 (PDF)
-- AGENDA SRRC & WRRC 2026 (PDF)
-
-These PDFs might contain the complete event list and could be easier to parse if you can provide the direct links.
-
-## Network Configuration Note
-
-The SRRC domain (`srrc.ch`) is not in my allowed network domains list, which is why I cannot directly fetch the events. The script provided will work on any machine with normal internet access.
+The SRRC website also provides PDF agenda documents that contain official event listings. These documents serve as a complementary source for event information validation.
