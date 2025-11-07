@@ -1,0 +1,151 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                        SRRC EVENT SCRAPER PROJECT                            ║
+║                                                                              ║
+║          Automated fetching of all events from srrc.ch/calendrier/          ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📦 PROJECT STRUCTURE
+════════════════════════════════════════════════════════════════════════════════
+
+srrc-event-scraper/
+├── 📄 INDEX.txt                    ← You are here!
+├── 📄 PROJECT_SUMMARY.md           ← Overview of what this project does
+├── 📄 QUICKSTART.md                ← Quick start guide (5 min setup)
+├── 📄 README.md                    ← Full technical documentation
+│
+├── 🐍 srrc_event_scraper.py        ← Main Python scraper script
+├── 📋 requirements.txt             ← Python package dependencies
+│
+├── 🔧 setup_and_run.sh             ← Automated setup script (RECOMMENDED)
+├── 🔧 run_scraper.sh               ← Simple run script (no venv)
+├── 🔧 Makefile                     ← Make commands for convenience
+│
+├── 📊 sample_output.json           ← Example of output format
+└── 🚫 .gitignore                   ← Git ignore rules
+
+════════════════════════════════════════════════════════════════════════════════
+
+🚀 QUICK START (Choose One)
+════════════════════════════════════════════════════════════════════════════════
+
+Option 1: Automated Setup (Recommended)
+────────────────────────────────────────
+  chmod +x setup_and_run.sh
+  ./setup_and_run.sh
+
+  ✓ Creates virtual environment
+  ✓ Installs dependencies
+  ✓ Runs scraper
+  ✓ Saves to srrc_events.json
+
+
+Option 2: Using Make
+────────────────────
+  make all
+
+  (Requires 'make' to be installed)
+
+
+Option 3: Manual Setup
+──────────────────────
+  python3 -m venv venv
+  source venv/bin/activate
+  pip install -r requirements.txt
+  python srrc_event_scraper.py
+  deactivate
+
+════════════════════════════════════════════════════════════════════════════════
+
+📖 DOCUMENTATION
+════════════════════════════════════════════════════════════════════════════════
+
+Start Here:
+  1. PROJECT_SUMMARY.md      - High-level overview
+  2. QUICKSTART.md           - Get running in 5 minutes
+  3. README.md               - Deep technical details
+
+────────────────────────────────────────────────────────────────────────────────
+
+📊 WHAT YOU'LL GET
+════════════════════════════════════════════════════════════════════════════════
+
+After running the scraper:
+  ✓ Console output with all events nicely formatted
+  ✓ JSON file (srrc_events.json) with structured data
+  ✓ Complete list of SRRC/WRRC events for next 24 months
+
+Event details include:
+  • Date and day of week
+  • Event title
+  • Location
+  • Organizer (SRRC/WRRC)
+  • Description
+  • Direct URL to event page
+
+────────────────────────────────────────────────────────────────────────────────
+
+🔧 REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+  • Python 3.7 or higher
+  • Internet connection
+  • 5 MB disk space (for venv + dependencies)
+
+Dependencies (auto-installed):
+  • requests       - HTTP library
+  • beautifulsoup4 - HTML parsing
+  • lxml          - XML/HTML parser
+
+────────────────────────────────────────────────────────────────────────════────
+
+❓ HELP & TROUBLESHOOTING
+════════════════════════════════════════════════════════════════════════════════
+
+Problem: "python3: command not found"
+Solution: Install Python 3 from https://python.org
+
+Problem: "Permission denied"
+Solution: chmod +x setup_and_run.sh
+
+Problem: Virtual environment issues
+Solution: See QUICKSTART.md section "Troubleshooting"
+
+────────────────────────────────────────────────────────────────────────────────
+
+🎯 WHAT THIS PROJECT DOES
+════════════════════════════════════════════════════════════════════════════════
+
+The SRRC website (srrc.ch/calendrier/) loads events dynamically using AJAX.
+You can't see all events at once - they're hidden behind "Load More" buttons.
+
+This scraper:
+  1. Automatically calls the same AJAX endpoint the website uses
+  2. Fetches ALL events from all date ranges
+  3. Removes duplicates
+  4. Saves everything in a clean JSON format
+
+No manual clicking required! 🎉
+
+────────────────────────────────────────────────────────────────────────────────
+
+💡 TIPS
+════════════════════════════════════════════════════════════════════════════════
+
+• Run regularly to get updated events
+• Modify script to filter by location/organizer
+• Convert JSON to CSV if needed for spreadsheets
+• Integrate with calendar apps or notification systems
+
+────────────────────────────────────────────────────════════════════════════────
+
+📅 CREATED: November 2025
+🔄 LAST UPDATED: November 7, 2025
+📧 QUESTIONS: See README.md
+
+════════════════════════════════════════════════════════════════════════════════
+
+Ready to start? Run:  ./setup_and_run.sh
+
+════════════════════════════════════════════════════════════════════════════════
